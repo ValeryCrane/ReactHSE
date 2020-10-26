@@ -14,13 +14,13 @@ class MyTodoList extends React.Component{
               id: 2,
               name: 'Workout',
               description: 'Do one pushup',
-              completed: true
+              completed: false
             },
             {
               id: 3,
               name: 'Studying',
               description: 'Homework needs to be done',
-              completed: true
+              completed: false
             },
             {
               id: 4,
@@ -37,20 +37,63 @@ class MyTodoList extends React.Component{
             ]
     };
     
+    copyState = () => {
+        let arr = [];
+        for(let obj of this.state.tasks){
+            arr.push({
+                id: obj.id,
+                name: obj.name,
+                description: obj.description,
+                completed: obj.completed
+            });
+        }
+        return{
+            tasks: arr
+        }
+    }
+    
+    markAsCompleted = (props) => {
+        let newState = this.copyState();
+        for(let obj of newState.tasks){
+            if(obj.id == props){
+                obj.completed ^= true;
+            }
+        }
+        this.setState(newState);
+    }
+    
+    completedTask = {
+        textDecoration: "line-through",
+        color: "gray"
+    }
+    
+    grayColor = {
+        color: "gray",
+        borderColor: "gray"
+    }
+    
+    
     createTask = (props) => {
         let completion = "";
-        if(props.tasks.completed) completion = "Completed";
-        else completion = "Is not completed";
+        let idAndButtonStyle = {};
+        let taskStyle = {};
+        if(props.tasks.completed){
+            completion = "de-complete";
+            idAndButtonStyle = this.grayColor;
+            taskStyle = this.completedTask;
+        }
+        else{
+            completion = "complete";
+        }
         return <div className="task">
           <div className="id-div">
-              <p>{props.tasks.id}</p>
+              <p style={idAndButtonStyle}>{props.tasks.id}</p>
           </div>
           <div className="info-div"> 
-              <h1>{props.tasks.name}</h1>
-              <p>{props.tasks.description}</p>
-              <p className="completion">{completion}</p>
-              <button onClick={()=>console.log(`Task ${props.tasks.id} completed status = ${props.tasks.completed}`)}>
-                  Completion
+              <h1 style={taskStyle}>{props.tasks.name}</h1>
+              <p style={taskStyle}>{props.tasks.description}</p>
+                <button onClick={()=>this.markAsCompleted(props.tasks.id)} style={idAndButtonStyle}>
+                    {completion}
               </button>
           </div>
           <hr/>
@@ -67,5 +110,6 @@ class MyTodoList extends React.Component{
         </div>
     }
 }
+
 export default MyTodoList;
 
