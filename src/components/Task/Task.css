@@ -1,0 +1,38 @@
+.task{
+    margin: 50px;
+    padding: 20px;
+    border-radius: 10px;
+    background: #f0f0f0;
+    box-shadow:  20px 20px 40px #dddddd, 
+                -20px -20px 40px #ffffff;
+    position: relative;
+}
+
+.task *{
+    display: inline-block;
+}
+
+.task h1{
+    margin: 0 50px 0 30px;
+    width: 30%;
+}
+
+.task p{
+    width: 40%
+}
+
+.task button{
+    font-size: 20px;
+    font-weight: 900;
+    border: none;
+    border-radius: 1000px;
+    padding: 10px 40px;
+    background: rgb(70, 70, 70);
+    color: #f0f0f0;
+    position: absolute;
+    right: 10%;
+}
+
+.task .completed:not(button){
+    text-decoration: line-through;
+}
