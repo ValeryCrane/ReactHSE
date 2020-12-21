@@ -13,6 +13,7 @@ $dark-color: #4F575B;
     &-light {
         border-right: 1px solid $dark-color;
         background: $light-color;
+        color: $dark-color;
 
         button{
             background: $dark-color;
@@ -23,6 +24,7 @@ $dark-color: #4F575B;
     &-dark {
         border-right: 1px solid $light-color;
         background: $dark-color;
+        color: $light-color;
 
         button{
             background: $light-color;
