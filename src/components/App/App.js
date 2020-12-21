@@ -1,38 +1,53 @@
 import React from "react";
-import "./App.css";
-import TodoList from "../TodoList/TodoList.js";
+import classNames from 'classnames/bind'
+
+import TaskList from "../TaskList/TaskList.js";
 import TaskAdder from "../TaskAdder/TaskAdder.js";
+
+import styles from "./App.module.scss";
+
+const cx = classNames.bind(styles);
 
 class App extends React.Component {
 
     //State, containing the last task id and the list of tasks.
     state = {
+        theme: 'light',
         lastid: 0,
-        tasks: [],
+        newCount: 0,
+        comletedCount: 0,
+        tasks: []
     };
 
     //This method makes task with certain id completed.
     markAsCompleted = (id) => {
-        let newState = {
-            ...this.state,
-        };
+        
+        let taskArray = this.state.tasks.map(task => ({...task}));
+        let newCompletedCount = this.state.comletedCount;
 
-        const idx = newState.tasks.findIndex((task) => task.id === id);
-        newState.tasks[idx].completed ^= true;
+        const idx = taskArray.findIndex((task) => task.id === id);
+        if(taskArray[idx].completed) newCompletedCount--;
+        else newCompletedCount++;
+        taskArray[idx].completed ^= true;
 
-        if (newState.tasks[idx].completed)
-            newState.tasks.push(newState.tasks.splice(idx, 1)[0]);
-        else newState.tasks.unshift(newState.tasks.splice(idx, 1)[0]);
+        if (taskArray[idx].completed)
+            taskArray.push(taskArray.splice(idx, 1)[0]);
+        else taskArray.unshift(taskArray.splice(idx, 1)[0]);
 
         console.log(this.state);
 
-        console.log("test");
-        this.setState(newState);
+        this.setState({
+            ...this.state,
+            tasks: taskArray,
+            comletedCount: newCompletedCount
+        });
     };
 
     //This method adds a task to the list.
     addATask = (name, description) => {
         let newState = {
+            ...this.state,
+            newCount: this.state.newCount + 1,
             lastid: this.state.lastid + 1,
             tasks: [
                 {
@@ -44,25 +59,56 @@ class App extends React.Component {
                 ...this.state.tasks,
             ],
         };
-
-        console.log("test");
         this.setState(newState);
     };
+
+    //This method сhanges the theme.
+    changeTheme = () => {
+        const newTheme = (this.state.theme === 'light' ? 'dark' : 'light');
+        this.setState({
+            ...this.state,
+            theme: newTheme
+        });
+    }
 
     //This method renders whole app.
     render() {
         return (
-            <div>
-                <TaskAdder addATask={this.addATask} />
-                <TodoList
-                    tasks={this.state.tasks}
-                    click={this.markAsCompleted}
+            <div className={cx('app', `app-${this.state.theme}`)}>
+                <TaskAdder 
+                    className={cx('adder')}
+                    addATask={this.addATask} 
+                    theme={this.state.theme}
+                    changeTheme={this.changeTheme}
                 />
-                {this.state.tasks.length === 0 ? (
-                    <div class="noTasks">Add your first task!</div>
-                ) : (
+
+                <div className={cx('info')}>
+                    {this.state.newCount !== this.state.comletedCount ?
+                    <TaskList
+                        tasks={this.state.tasks.filter(task => !task.completed)}
+                        click={this.markAsCompleted}
+                        header="Complete those:"
+                        theme={this.state.theme}
+                    />
+                    :
                     ""
-                )}
+                    }
+                    {this.state.comletedCount !== 0 ?
+                    <TaskList
+                        tasks={this.state.tasks.filter(task => task.completed)}
+                        click={this.markAsCompleted}
+                        header="Completed tasks:"
+                        theme={this.state.theme}
+                    />
+                    :
+                    ""
+                    }
+                    {this.state.tasks.length === 0 ? (
+                        <h1 className={cx('no-tasks')}>Add your first task!</h1>
+                    ) : (
+                        ""
+                    )}
+                </div>
             </div>
         );
     }

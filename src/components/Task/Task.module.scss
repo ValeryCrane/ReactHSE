@@ -1,0 +1,70 @@
+$light-color: #F6F6F6;
+$dark-color: #4F575B;
+
+.task{
+
+    position: relative;
+
+    border-radius: 25px;
+    padding: 40px;
+    margin: 30px;
+
+    min-width: 200px;
+    max-width: 400px;
+
+    h1{
+        font-size: 24pt;
+        margin-bottom: 20px;
+        word-wrap: break-word;
+    }
+
+    p{
+        font-size: 16pt;
+        margin-bottom: 20px;
+        height: 120pt;
+        overflow: scroll;
+    }
+
+    button{
+
+        width: 100%;
+        border-radius: 20px;
+        border: none;
+        padding: 10px;
+        
+        font-size: 15pt;
+
+        transition: all ease 0.07s;
+    }
+
+    button:hover{
+        transform: scale(1.1);
+    }
+
+    button:focus{
+        outline: none;
+    }
+    
+
+    &-light{
+        background: $light-color;
+        box-shadow: -6px -6px 12px 2px #FDFDFD, 
+        6px 6px 12px 2px #EFEFEF;
+        
+        button{
+            background: $dark-color;
+            color: $light-color;
+        }
+    }
+
+    &-dark{
+        background: $dark-color;
+        box-shadow: 2px 4px 6px rgba(0, 0, 0, 0.15), 
+                    -2px -2px 12px rgba(255, 255, 255, 0.08);
+
+        button{
+            background: $light-color;
+            color: $dark-color;
+        }
+    }
+}

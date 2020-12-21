@@ -1,8 +1,11 @@
 import React from "react";
-import "./TaskAdder.css";
+import classNames from "classnames/bind";
+
+import styles from "./TaskAdder.module.scss";
+
+const cx = classNames.bind(styles);
 
 class TaskAdder extends React.Component {
-
     //State, containing input values.
     state = {
         name: "",
@@ -40,19 +43,43 @@ class TaskAdder extends React.Component {
     //Render, finally...
     render() {
         return (
-            <div class="taskAdder">
+            <div className={cx("adder", `adder-${this.props.theme}`)}>
                 <h1>Add a task</h1>
-                <input
-                    value={this.state.name}
-                    onChange={this.handleNameChange}
-                    placeholder="name"
-                />
-                <input
-                    value={this.state.description}
-                    onChange={this.handleDescriptionChange}
-                    placeholder="description"
-                />
+                <div
+                    className={cx(
+                        "input-wrapper",
+                        `input-wrapper-${this.props.theme}`
+                    )}
+                >
+                    <input
+                        className={cx("input", `input-${this.props.theme}`)}
+                        value={this.state.name}
+                        onChange={this.handleNameChange}
+                        placeholder="name"
+                    />
+                    <span className={cx("bar")}></span>
+                </div>
+                <div
+                    className={cx(
+                        "input-wrapper",
+                        `input-wrapper-${this.props.theme}`
+                    )}
+                >
+                    <input
+                        className={cx("input", `input-${this.props.theme}`)}
+                        value={this.state.description}
+                        onChange={this.handleDescriptionChange}
+                        placeholder="description"
+                    />
+                    <span className={cx("bar")}></span>
+                </div>
                 <button onClick={this.addATask}>Add</button>
+                <button
+                    onClick={this.props.changeTheme}
+                    className={cx("theme")}
+                >
+                    Change Theme
+                </button>
             </div>
         );
     }
