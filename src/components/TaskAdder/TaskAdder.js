@@ -3,13 +3,27 @@ import classNames from "classnames/bind";
 
 import styles from "./TaskAdder.module.scss";
 
+import { connect } from 'react-redux';
+
+import { handleThemeChange } from '../../actions/theme.js';
+import { handleTaskAddition } from '../../actions/tasks.js'
+
 const cx = classNames.bind(styles);
 
-class TaskAdder extends React.Component {
+const mapStateToProps = (state) => ({
+    theme: state.theme.theme
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    dispatchOnTaskAddition: (name, description) => dispatch(handleTaskAddition(name, description)),
+    dispatchOnThemeChange: () => dispatch(handleThemeChange())
+});
+
+class TaskAdderComponent extends React.Component {
     //State, containing input values.
     state = {
         name: "",
-        description: "",
+        description: ""
     };
 
     //Method, that handles change of the name input.
@@ -30,15 +44,18 @@ class TaskAdder extends React.Component {
         });
     };
 
-    //Method, that clears all inputs, after adding a task.
-    addATask = () => {
-        if (!(this.state.description && this.state.name)) return;
-        this.props.addATask(this.state.name, this.state.description);
+    handleTaskAddition = () => {
+        if(this.state.name === "" || this.state.description === "")
+            return;
+        this.props.dispatchOnTaskAddition(
+            this.state.name,
+            this.state.description
+            );
         this.setState({
             name: "",
-            description: "",
-        });
-    };
+            description: ""
+        })
+    }
 
     //Render, finally...
     render() {
@@ -73,9 +90,9 @@ class TaskAdder extends React.Component {
                     />
                     <span className={cx("bar")}></span>
                 </div>
-                <button onClick={this.addATask}>Add</button>
+                <button onClick={this.handleTaskAddition}>Add</button>
                 <button
-                    onClick={this.props.changeTheme}
+                    onClick={this.props.dispatchOnThemeChange}
                     className={cx("theme")}
                 >
                     Change Theme
@@ -85,4 +102,4 @@ class TaskAdder extends React.Component {
     }
 }
 
-export default TaskAdder;
+export const TaskAdder = connect(mapStateToProps, mapDispatchToProps)(TaskAdderComponent);

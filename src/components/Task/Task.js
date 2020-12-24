@@ -1,22 +1,36 @@
 import React from "react";
-import classNames from 'classnames/bind'
+import classNames from 'classnames/bind';
 
 import styles from "./Task.module.scss";
 
+import { connect } from 'react-redux';
+import { handleTaskCompletion, handleTaskRemoval } from '../../actions/tasks.js';
+
 const cx = classNames.bind(styles);
 
-const Task = (props) => {
-    //Creating a task competion indicator text.
-    const completed = props.task.completed ? "completed" : "";
+const mapStateToProps = (state) => ({
+    theme: state.theme.theme
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    dispatchOnTaskCompletion: (id) => dispatch(handleTaskCompletion(id)),
+    dispatchOnTaskRemoval: (id) => dispatch(handleTaskRemoval(id))
+});
+
+
+const TaskComponent = ({id, name, description, completed, theme, dispatchOnTaskCompletion, dispatchOnTaskRemoval}) => {
     return (
-        <div className={cx('task', `task-${props.theme}`)}>
-            <h1 className={completed}>{props.task.name}</h1>
-            <p className={completed}>{props.task.description}</p>
-            <button onClick={() => props.click(props.task.id)}>
-                {props.task.completed ? "return" : "complete"}
+        <div className={cx('task', `task-${theme}`)}>
+            <h1>{name}</h1>
+            <p>{description}</p>
+            <button onClick={() => dispatchOnTaskCompletion(id)}>
+                {completed ? "return" : "complete"}
+            </button>
+            <button onClick={() => dispatchOnTaskRemoval(id)}>
+                delete
             </button>
         </div>
     );
 };
 
-export default Task;
+export const Task = connect(mapStateToProps, mapDispatchToProps)(TaskComponent);

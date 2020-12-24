@@ -11,3 +11,6 @@ Ugly neuomorphic redesign. Now you have a possibility to add tasks and complete 
 
 ## hw-5
 New interface and theme changer.
+
+## hw-6
+Usage of redux and an opportunity to delete tasks.
